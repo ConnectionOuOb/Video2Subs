@@ -14,3 +14,17 @@ Future<bool> isMiniCondaInstalled() async {
 
   return false;
 }
+
+Future<bool> isWhisperInstalled() async {
+  try {
+    var result = await Process.run('conda', ['activate', 'whisper', '&&', 'whisper']);
+
+    if (result.exitCode == 0) {
+      return true;
+    }
+  } catch (e) {
+    debugPrint("### Info: Whisper is not installed");
+  }
+
+  return false;
+}

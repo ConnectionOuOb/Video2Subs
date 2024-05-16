@@ -1,4 +1,5 @@
 import 'tool/selectFile.dart';
+import 'tool/conda/env.dart';
 import 'tool/conda/check.dart';
 import 'tool/conda/install.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +29,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  bool condaInstalled = false;
+  bool installedConda = false;
+  bool installedWhisper = false;
 
   init() async {
     await isMiniCondaInstalled().then((value) {
-      condaInstalled = value;
+      installedConda = value;
+      setState(() {});
+    });
+
+    await isWhisperInstalled().then((value) {
+      installedWhisper = value;
       setState(() {});
     });
   }
@@ -60,7 +67,7 @@ class _MyHomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             const Text('1. 安裝 Miniconda', style: TextStyle(fontSize: 18)),
             const SizedBox(height: 15),
-            condaInstalled
+            installedConda
                 ? Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(20)),
@@ -69,13 +76,28 @@ class _MyHomePageState extends State<HomePage> {
                 : ElevatedButton(
                     onPressed: () {
                       installMiniConda().then((value) {
-                        condaInstalled = value;
+                        installedConda = value;
                         setState(() {});
                       });
                     },
                     child: const Text('自動安裝'),
                   ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
+            const Text('2. 設定神經網路模型', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 15),
+            installedWhisper
+                ? Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(20)),
+                    child: const Text('已安裝', style: TextStyle(color: Colors.white)),
+                  )
+                : ElevatedButton(
+                    onPressed: () {
+                      setupWhisper();
+                    },
+                    child: const Text('自動安裝'),
+                  ),
+            const SizedBox(height: 20),
             const Divider(),
             const Text('選擇要轉換成字幕的檔案', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 15),
