@@ -1,4 +1,6 @@
 import 'tool/selectFile.dart';
+import 'tool/conda/check.dart';
+import 'tool/conda/install.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,6 +28,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  bool condaInstalled = false;
+
+  init() async {
+    await isMiniCondaInstalled().then((value) {
+      condaInstalled = value;
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    init();
+
+    setState(() {});
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,16 +56,34 @@ class _MyHomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Select a video file to extract subtitles',
-              style: TextStyle(fontSize: 18),
-            ),
+            const Text('前置設定作業', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
+            const Text('1. 安裝 Miniconda', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 15),
+            condaInstalled
+                ? Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(20)),
+                    child: const Text('已安裝', style: TextStyle(color: Colors.white)),
+                  )
+                : ElevatedButton(
+                    onPressed: () {
+                      installMiniConda().then((value) {
+                        condaInstalled = value;
+                        setState(() {});
+                      });
+                    },
+                    child: const Text('自動安裝'),
+                  ),
+            const SizedBox(height: 10),
+            const Divider(),
+            const Text('選擇要轉換成字幕的檔案', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 15),
             ElevatedButton(
               onPressed: () {
                 selectFile();
               },
-              child: const Text('Select video file'),
+              child: const Text('選取檔案'),
             ),
           ],
         ),
