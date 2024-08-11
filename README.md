@@ -1,5 +1,12 @@
 # Video2Subs
-An app to extract substiles from sound in video
+### An app to extract substiles from sound or video
 
-## 備註
-### 開發電腦效能不足，停止後續開發，直到電腦升級XD
+## Download
+```git clone https://github.com/ConnectionOuOb/Video2Subs.git```
+
+## Build
+### Windows
+```flutter build windows```
+
+### Linux
+```flutter build linux```
